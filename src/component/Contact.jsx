@@ -11,6 +11,7 @@ function Contact() {
     const [errors, setErrors] = useState({
         name: "",
         email: "",
+        message: ""
     });
 
     const [status, setStatus] = useState("");
@@ -37,6 +38,7 @@ function Contact() {
         let newErrors = {
             name: "",
             email: "",
+            message: ""
         };
 
         // Name validation
@@ -59,15 +61,21 @@ function Contact() {
             newErrors.email = "Please enter a valid email address.";
         }
 
+        // Message validation
+        if (formData.message.trim() === "") {
+            newErrors.message = "Message is required.";
+        }
+
         setErrors(newErrors);
 
-        if (newErrors.name || newErrors.email) {
+        if (newErrors.name || newErrors.email || newErrors.message) {
             return;
         }
 
         try {
+
             const response = await fetch(
-                "http://localhost:5000/api/messages",
+                "https://portfolio-backend-umber-eight.vercel.app/api/messages",
                 {
                     method: "POST",
                     headers: {
@@ -96,6 +104,7 @@ function Contact() {
             setStatus("Message sent successfully!");
 
         } catch (error) {
+
             console.error("Error sending message:", error);
 
             setStatus(error.message);
@@ -117,6 +126,7 @@ function Contact() {
                 <form onSubmit={handleSubmit}>
 
                     <div className="form-group">
+
                         <label htmlFor="name">
                             Name
                         </label>
@@ -136,9 +146,11 @@ function Contact() {
                                 {errors.name}
                             </p>
                         )}
+
                     </div>
 
                     <div className="form-group">
+
                         <label htmlFor="email">
                             Email
                         </label>
@@ -158,9 +170,11 @@ function Contact() {
                                 {errors.email}
                             </p>
                         )}
+
                     </div>
 
                     <div className="form-group">
+
                         <label htmlFor="message">
                             Message
                         </label>
@@ -171,14 +185,14 @@ function Contact() {
                             placeholder="Tell me about your project..."
                             value={formData.message}
                             onChange={handleChange}
-                            maxLength="500"
-                        ></textarea>
+                        />
 
                         {errors.message && (
                             <p className="error">
                                 {errors.message}
                             </p>
                         )}
+
                     </div>
 
                     <button type="submit">
